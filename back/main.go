@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -14,9 +13,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
@@ -95,19 +94,19 @@ type Question struct {
 // }
 
 func main() {
-	dsn := url.URL{
-		User:     url.UserPassword("Admin", "ButterFly777"),
-		Scheme:   "postgres",
-		Host:     fmt.Sprintf("%s:%d", os.Getenv("POSTGRESHOST"), os.Getenv("POSTGRESPORT")),
-		Path:     "phy",
-		RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
-	}
-	db, err := gorm.Open("postgres", dsn.String())
+
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
+		os.Getenv("POSTGRESHOST"),
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_DB"),
+		os.Getenv("POSTGRESPORT"))
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
 	}
-	defer db.Close()
-
+	fff, _ := db.DB()
+	defer fff.Close()
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Question{})
 	// db.AutoMigrate(&Quiz{})

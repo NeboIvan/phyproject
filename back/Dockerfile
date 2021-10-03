@@ -8,14 +8,13 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o /app
-RUN chmod u+x /app
+RUN go build -o /app && chmod u+x /app
 
-FROM scratch
+#FROM scratch
 
-WORKDIR /
+#WORKDIR /
 
-COPY --from=builder /app /app
+#COPY --from=builder /app /app
 
 EXPOSE 8080
 
