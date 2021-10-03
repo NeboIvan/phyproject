@@ -15,9 +15,9 @@ services:
     image: gakgan/phy-be:latest
     restart: always
     ports:
-      - "8081:3000"
+      - "8080:8080"
   fe:
-    image: gakgan/phy-be:latest
+    image: gakgan/phy-fe:latest
     restart: always
     ports:
       - "8080:8080"

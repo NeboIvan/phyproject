@@ -24,7 +24,7 @@ jobs:
         with:
           context: ./back/
           push: true
-          tags: gakgan/phy-fe:latest
+          tags: gakgan/phy-be:latest
       - name: Build and push front
         uses: docker/build-push-action@v2
         with:
