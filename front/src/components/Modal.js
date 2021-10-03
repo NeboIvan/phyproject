@@ -34,7 +34,7 @@ export default function FormDialog() {
     setOpen(false);
   };
   const handleOkClose = () => {
-    const recipeUrl = "http://localhost:8080/newq";
+    const recipeUrl = "http://5.188.158.130:8081/newq";
     const postBody = {
         "name":nameavl,
         "username": usernameavl,
