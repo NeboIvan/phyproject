@@ -19,7 +19,6 @@ import (
 )
 
 var db *gorm.DB
-var err error
 
 var salt string
 var refsalt string
@@ -94,14 +93,14 @@ type Question struct {
 // }
 
 func main() {
-
+	var err error
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
 		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_USER"),
 		os.Getenv("POSTGRES_PASSWORD"),
 		os.Getenv("POSTGRES_DB"),
 		os.Getenv("POSTGRES_PORT"))
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -322,6 +321,7 @@ func GetQuestion(c *gin.Context) {
 }
 func GetQuestions(c *gin.Context) {
 	var qests []Question
+	fmt.Println("-------", db)
 	if err := db.Find(&qests).Error; err != nil {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
