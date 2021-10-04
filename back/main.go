@@ -311,6 +311,7 @@ func FetchAuth(authD *AccessDetails) (uint, error) {
 func GetQuestion(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var qest Question
+	fmt.Println("-------", id)
 	if err := db.Where("id = ?", id).First(&qest).Error; err != nil {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
