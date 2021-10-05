@@ -41,12 +41,12 @@ var db *gorm.DB
 type Question struct {
 	ID       uint `json:"id"`
 	OwnerID  uint
-	Name     string   `json:"name"`
-	UserName string   `json:"username"`
-	Question string   `json:"question"`
-	Options  []string `json:"options"`
-	Date     string   `json:"date"`
-	Answer   int      `json:"ans"`
+	Name     string `json:"name"`
+	UserName string `json:"username"`
+	Question string `json:"question"`
+	Options  string `json:"options"`
+	Date     string `json:"date"`
+	Answer   int    `json:"ans"`
 }
 
 // type ImgQuestion struct {

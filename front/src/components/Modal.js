@@ -39,7 +39,7 @@ export default function FormDialog() {
         "name":nameavl,
         "username": usernameavl,
         "question": textval,
-        "options": Options,
+        "options": Options.join('@#@'),
         "ans": 2
     };
     console.log(postBody);
