@@ -1,4 +1,4 @@
 .env*
 .vscode/*
 docker-compose.yml
-data-pg/*
+data-*

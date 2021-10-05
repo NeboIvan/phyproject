@@ -106,6 +106,7 @@ func main() {
 	}
 	fff, _ := db.DB()
 	defer fff.Close()
+
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Question{})
 	// db.AutoMigrate(&Quiz{})
@@ -113,6 +114,8 @@ func main() {
 	// db.AutoMigrate(&FullImgQuestion{})
 	// db.AutoMigrate(&ImgQuestion{})
 	db.AutoMigrate(&TokenBase{})
+
+	fmt.Println("****** -- DB: ", db)
 
 	r := gin.Default()
 	r.GET("/q", GetQuestions)
