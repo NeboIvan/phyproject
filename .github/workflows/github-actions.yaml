@@ -37,7 +37,7 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          source: "docker-compose.yaml"
+          source: "docker-compose.yml"
           target: "/phyproject"
       - name: docker-compose pull
         uses: appleboy/ssh-action@master
