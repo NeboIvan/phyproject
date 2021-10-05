@@ -15,8 +15,8 @@ services:
     image: gakgan/phy-be:latest
     restart: always
     environment:
-      - POSTGRESHOST=${POSTGRES_HOST}
-      - POSTGRESPORT=${POSTGRES_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
