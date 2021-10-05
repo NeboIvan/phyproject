@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -115,7 +116,7 @@ func main() {
 	// db.AutoMigrate(&ImgQuestion{})
 	db.AutoMigrate(&TokenBase{})
 
-	fmt.Println("****** -- DB: ", db)
+	log.Print("****** -- DB: ", db)
 
 	r := gin.Default()
 	r.GET("/q", GetQuestions)
