@@ -8,6 +8,15 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import MultipleValueTextInput from "react-multivalue-text-input";
 import IconButton from "@mui/material/IconButton";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+import CommentIcon from '@mui/icons-material/Comment';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import "./modal.css";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -17,47 +26,139 @@ export default function FormDialog() {
   const [usernameavl, setUsernameval] = React.useState("");
   const [textval, setTextval] = React.useState("");
   const [Options, setOptions] = React.useState([]);
+  const [Answers, setAnswers] = React.useState([]);
+  const [error, SetError] = React.useState(false);
+  const [error1, SetError1] = React.useState(false);
+  const [error2, SetError2] = React.useState(false);
+  const [error3, SetError3] = React.useState(false);
+  const [errorText, SetErrorText] = React.useState("Не должно быть пустым");
+  const ErrText = "Не должно быть пустым";
 
+  const handleToggle = (value) => () => {
+    const currentIndex = Answers.indexOf(value);
+    const newChecked = [...Answers];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setAnswers(newChecked);
+    console.log(Answers);
+  };
+
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      if (event.target.value == "") {
+        SetError(true);
+        return;
+      }
+      let isTrue = false;
+      Options.forEach((el) => {
+        if (event.target.value === el) {
+          SetError(true);
+          SetErrorText("Такой вариант ответа уже есть");
+          isTrue = true;
+        }
+      });
+      if (!isTrue) {
+        setOptions(Options.concat(event.target.value));
+        event.target.value = "";
+        console.log("Options:", Options);
+      }
+    }
+  };
+  const handleChangeErr = () => {
+    SetError(false);
+    SetErrorText("Не должно быть пустым");
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
   const nameavlChange = (e) => {
-    setNameval(e.target.value);
+    if (e.target.value === "") {
+      SetError1(true);
+    } else {
+      SetError1(false);
+      setNameval(e.target.value);
+    }
   };
   const usernameavlChange = (e) => {
-    setUsernameval(e.target.value);
+    if (e.target.value === "") {
+      SetError2(true);
+    } else {
+      SetError2(false);
+      setUsernameval(e.target.value);
+    }
   };
   const textvalChange = (e) => {
-    setTextval(e.target.value);
+    if (e.target.value === "") {
+      SetError3(true);
+    } else {
+      SetError3(false);
+      setTextval(e.target.value);
+    }
   };
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOkClose = () => {
-    const recipeUrl = "http://5.188.158.130:5081/newq";
-    const postBody = {
-        "name":nameavl,
-        "username": usernameavl,
-        "question": textval,
-        "options": Options.join('@#@'),
-        "ans": 2
-    };
-    console.log(postBody);
-    const requestMetadata = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postBody),
-    };
+  const handleDelete = (id) => {
+    let PromAns = [...Answers];
+    let idans = Answers.indexOf(Options[id]);
+    PromAns.splice(idans,1);
+    setAnswers(PromAns);
 
-    fetch(recipeUrl, requestMetadata)
-      .then((res) => res.json())
-      .then((recipes) => {
-        console.log(recipes);
-      });
-    setOpen(false);
-    window.location.reload();
+    let PromOpt = [...Options];
+    PromOpt.splice(id,1);
+    
+    setOptions(PromOpt);
+    alert(Answers);
+  };
+
+  const handleOkClose = () => {
+    let CanFetch = true;
+    if (nameavl === "") {
+      SetError1(true);
+    }
+    if (usernameavl === "") {
+      SetError2(true);
+    }
+    if (textval === "") {
+      SetError3(true);
+    }
+    if (Options.length == 0) {
+      SetError(true);
+    }
+    if (Answers.length == 0) {
+    }
+    if (CanFetch) {
+      const recipeUrl = "http://5.188.158.130:5081/newq";
+      const postBody = {
+        name: nameavl,
+        username: usernameavl,
+        question: textval,
+        options: Options.join("@#@"),
+        ans: Answers.join("@#@"),
+      };
+      console.log(postBody);
+      const requestMetadata = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postBody),
+      };
+
+      fetch(recipeUrl, requestMetadata)
+        .then((res) => res.json())
+        .then((recipes) => {
+          console.log(recipes);
+        });
+      setOpen(false);
+      window.location.reload();
+    }
   };
 
   return (
@@ -71,45 +172,90 @@ export default function FormDialog() {
         <DialogTitle>Создание Задачи</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
-            margin="dense"
             id="name"
             label="Название"
+            style={{marginBottom:15}}
             type="text"
             fullWidth
             variant="standard"
-            helperText="Обязательное поле"
-            value={nameavl}
+            helperText={error1 ? ErrText : ""}
+            error={error1}
             onChange={nameavlChange}
           />
           <TextField
-            autoFocus
-            margin="dense"
             id="username"
             label="Ваше Имя"
             type="text"
+            style={{marginBottom:15}}
             fullWidth
+            error={error2}
             variant="standard"
-            helperText="Обязательное поле"
-            value={usernameavl}
+            helperText={error2 ? ErrText : ""}
             onChange={usernameavlChange}
           />
           <TextField
             id="outlined-multiline-static"
             label="Текст Задачи"
             multiline
+            style={{marginBottom:15}}
             fullWidth
+            helperText={error3 ? ErrText : ""}
             rows={4}
-            value={textval}
+            error={error3}
             onChange={textvalChange}
           />
-          <MultipleValueTextInput
-            onItemAdded={(item, allItems) => setOptions(allItems)}
-            onItemDeleted={(item, allItems) => setOptions(allItems)}
+          <TextField
+            id="standard-basic"
+            fullWidth
+            helperText={error ? errorText : ""}
+            error={error}
+            style={{marginBottom:10}}
             label="Варианты ответа"
-            name="item-input"
-            placeholder="Введите вариант ответа и нажмите ENTER"
+            placeholder="Введие вариант ответа и нажмите Enter"
+            onKeyPress={handleKeyPress}
+            onChange={handleChangeErr}
+            variant="standard"
           />
+          <List
+            sx={{ width: "90%" }}
+          >
+            {Options.map((value, idM) => {
+              const labelId = `checkbox-list-label-${value}`;
+
+              return (
+                <ListItem
+                  key={value}
+                  secondaryAction={
+                    <IconButton edge="end" onClick={handleDelete.bind(this, idM)} aria-label="comments">
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                  disablePadding
+                >
+                  <ListItemButton
+                    role={undefined}
+                    onClick={handleToggle(value)}
+                    dense
+                  >
+                    <ListItemIcon>
+                      <Checkbox
+                        edge="start"
+                        checked={Answers.indexOf(value) !== -1}
+                        tabIndex={-1}
+                        disableRipple
+                        inputProps={{ "aria-labelledby": labelId }}
+                      />
+                    </ListItemIcon>
+                    <ListItemText
+                      id={labelId}
+                      primary={value}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+
         </DialogContent>
 
         <DialogActions>
