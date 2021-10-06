@@ -45,7 +45,7 @@ type Question struct {
 	Question string `json:"question"`
 	Options  string `json:"options"`
 	Date     string `json:"date"`
-	Answer   int    `json:"ans"`
+	Ans      int    `json:"ans"`
 }
 
 // type ImgQuestion struct {

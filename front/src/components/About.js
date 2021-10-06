@@ -62,6 +62,13 @@ export default function About() {
             }
             return <p> {i+1}. {el} </p>;
           })}
+          <h4>Правильные ответы:</h4>
+          {item.options.split("@#@").map((el) => {
+            {
+              console.log(el);
+            }
+            return <p> - {el}</p>;
+          })}
           <h4>Дата:</h4>
           <p>{item.date}</p>
         </div>
