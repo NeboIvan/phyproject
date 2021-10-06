@@ -8,14 +8,16 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import MultipleValueTextInput from "react-multivalue-text-input";
 import IconButton from "@mui/material/IconButton";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import CommentIcon from '@mui/icons-material/Comment';
-import DeleteIcon from '@mui/icons-material/Delete';
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import Alert from "@mui/material/Alert";
+import Checkbox from "@mui/material/Checkbox";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import "./modal.css";
 
@@ -29,6 +31,7 @@ export default function FormDialog() {
   const [Answers, setAnswers] = React.useState([]);
   const [error, SetError] = React.useState(false);
   const [error1, SetError1] = React.useState(false);
+  const [AlertOpen, SetAlertOpen] = React.useState(false);
   const [error2, SetError2] = React.useState(false);
   const [error3, SetError3] = React.useState(false);
   const [errorText, SetErrorText] = React.useState("Не должно быть пустым");
@@ -47,7 +50,6 @@ export default function FormDialog() {
     setAnswers(newChecked);
     console.log(Answers);
   };
-
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -72,6 +74,7 @@ export default function FormDialog() {
   };
   const handleChangeErr = () => {
     SetError(false);
+    SetAlertOpen(false);
     SetErrorText("Не должно быть пустым");
   };
   const handleClickOpen = () => {
@@ -107,31 +110,35 @@ export default function FormDialog() {
   const handleDelete = (id) => {
     let PromAns = [...Answers];
     let idans = Answers.indexOf(Options[id]);
-    PromAns.splice(idans,1);
+    PromAns.splice(idans, 1);
     setAnswers(PromAns);
 
     let PromOpt = [...Options];
-    PromOpt.splice(id,1);
-    
+    PromOpt.splice(id, 1);
+
     setOptions(PromOpt);
-    alert(Answers);
   };
 
   const handleOkClose = () => {
     let CanFetch = true;
     if (nameavl === "") {
       SetError1(true);
+      CanFetch = false;
     }
     if (usernameavl === "") {
       SetError2(true);
+      CanFetch = false;
     }
     if (textval === "") {
       SetError3(true);
+      CanFetch = false;
     }
     if (Options.length == 0) {
       SetError(true);
+      CanFetch = false;
     }
     if (Answers.length == 0) {
+      SetAlertOpen(true);
     }
     if (CanFetch) {
       const recipeUrl = "http://5.188.158.130:5081/newq";
@@ -171,10 +178,31 @@ export default function FormDialog() {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Создание Задачи</DialogTitle>
         <DialogContent>
+          <Collapse in={AlertOpen}>
+            <Alert
+              variant="outlined"
+              severity="warning"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    SetAlertOpen(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              Необходимо указать Варианты ответа
+            </Alert>
+          </Collapse>
           <TextField
             id="name"
             label="Название"
-            style={{marginBottom:15}}
+            style={{ marginBottom: 15 }}
             type="text"
             fullWidth
             variant="standard"
@@ -186,7 +214,7 @@ export default function FormDialog() {
             id="username"
             label="Ваше Имя"
             type="text"
-            style={{marginBottom:15}}
+            style={{ marginBottom: 15 }}
             fullWidth
             error={error2}
             variant="standard"
@@ -197,7 +225,7 @@ export default function FormDialog() {
             id="outlined-multiline-static"
             label="Текст Задачи"
             multiline
-            style={{marginBottom:15}}
+            style={{ marginBottom: 15 }}
             fullWidth
             helperText={error3 ? ErrText : ""}
             rows={4}
@@ -209,16 +237,14 @@ export default function FormDialog() {
             fullWidth
             helperText={error ? errorText : ""}
             error={error}
-            style={{marginBottom:10}}
+            style={{ marginBottom: 10 }}
             label="Варианты ответа"
             placeholder="Введие вариант ответа и нажмите Enter"
             onKeyPress={handleKeyPress}
             onChange={handleChangeErr}
             variant="standard"
           />
-          <List
-            sx={{ width: "90%" }}
-          >
+          <List sx={{ width: "90%" }}>
             {Options.map((value, idM) => {
               const labelId = `checkbox-list-label-${value}`;
 
@@ -226,7 +252,11 @@ export default function FormDialog() {
                 <ListItem
                   key={value}
                   secondaryAction={
-                    <IconButton edge="end" onClick={handleDelete.bind(this, idM)} aria-label="comments">
+                    <IconButton
+                      edge="end"
+                      onClick={handleDelete.bind(this, idM)}
+                      aria-label="comments"
+                    >
                       <DeleteIcon />
                     </IconButton>
                   }
@@ -246,16 +276,12 @@ export default function FormDialog() {
                         inputProps={{ "aria-labelledby": labelId }}
                       />
                     </ListItemIcon>
-                    <ListItemText
-                      id={labelId}
-                      primary={value}
-                    />
+                    <ListItemText id={labelId} primary={value} />
                   </ListItemButton>
                 </ListItem>
               );
             })}
           </List>
-
         </DialogContent>
 
         <DialogActions>

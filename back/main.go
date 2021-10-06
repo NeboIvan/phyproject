@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -88,6 +87,7 @@ type Question struct {
 
 func main() {
 	var err error
+	gin.SetMode(gin.ReleaseMode)
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
 		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_USER"),
@@ -99,6 +99,7 @@ func main() {
 		fmt.Println(err)
 	}
 	fff, _ := db.DB()
+
 	defer fff.Close()
 
 	// db.AutoMigrate(&User{})
@@ -108,8 +109,6 @@ func main() {
 	// db.AutoMigrate(&FullImgQuestion{})
 	// db.AutoMigrate(&ImgQuestion{})
 	// db.AutoMigrate(&TokenBase{})
-
-	log.Print("****** -- DB: ", db)
 
 	r := gin.Default()
 	r.GET("/q", GetQuestions)
@@ -307,7 +306,6 @@ func main() {
 func GetQuestion(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var qest Question
-	fmt.Println("-------", id)
 	if err := db.Where("id = ?", id).First(&qest).Error; err != nil {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
@@ -318,7 +316,6 @@ func GetQuestion(c *gin.Context) {
 }
 func GetQuestions(c *gin.Context) {
 	var qests []Question
-	fmt.Println("-------", db)
 	if err := db.Find(&qests).Error; err != nil {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
