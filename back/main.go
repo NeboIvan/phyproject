@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	pq "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -16,12 +17,12 @@ var db *gorm.DB
 type Question struct {
 	ID       uint `json:"id"`
 	OwnerID  uint
-	Name     string   `json:"name"`
-	UserName string   `json:"username"`
-	Question string   `json:"question"`
-	Options  []string `json:"options"`
-	Date     string   `json:"date"`
-	Ans      []string `json:"ans"`
+	Name     string         `json:"name"`
+	UserName string         `json:"username"`
+	Question string         `json:"question"`
+	Options  pq.StringArray `json:"options" gorm:"type:text[]"`
+	Date     string         `json:"date"`
+	Ans      pq.StringArray `json:"ans" gorm:"type:text[]"`
 }
 
 func main() {
