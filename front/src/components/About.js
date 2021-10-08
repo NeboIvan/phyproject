@@ -56,14 +56,14 @@ export default function About() {
           <h4>Имя пользователя:</h4>
           <p>{item.username}</p>
           <h4>Варианты ответа:</h4>
-          {item.options.split("@#@").map((el, i) => {
+          {item.options.map((el, i) => {
             {
               console.log(el);
             }
             return <p> {i+1}. {el} </p>;
           })}
           <h4>Правильные ответы:</h4>
-          {item.ans.split("@#@").map((el) => {
+          {item.ans.map((el) => {
             {
               console.log(el);
             }
