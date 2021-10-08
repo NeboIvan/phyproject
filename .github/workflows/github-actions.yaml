@@ -31,6 +31,12 @@ jobs:
           context: ./front/
           push: true
           tags: gakgan/phy-fe:latest
+      - name: Build and push front
+        uses: docker/build-push-action@v2
+        with:
+          context: ./database/
+          push: true
+          tags: gakgan/dbpstgrs:latest
       - name: copy file via ssh
         uses: appleboy/scp-action@master
         with:
