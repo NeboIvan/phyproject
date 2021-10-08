@@ -146,8 +146,8 @@ export default function FormDialog() {
         name: nameavl,
         username: usernameavl,
         question: textval,
-        options: Options.join("@#@"),
-        ans: Answers.join("@#@"),
+        options: Options,
+        ans: Answers,
       };
       console.log(postBody);
       const requestMetadata = {
@@ -196,7 +196,7 @@ export default function FormDialog() {
               }
               sx={{ mb: 2 }}
             >
-              Необходимо указать Варианты ответа
+              Необходимо указать правильные Варианты ответа
             </Alert>
           </Collapse>
           <TextField

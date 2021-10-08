@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   db:
-    image: gakgan/dbpstgrs
+    image: postgres
     restart: always
     environment:
       - POSTGRES_USER=${POSTGRES_USER:?err}
