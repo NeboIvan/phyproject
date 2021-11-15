@@ -18,11 +18,35 @@ type Question struct {
 	ID       uint `json:"id"`
 	OwnerID  uint
 	Name     string         `json:"name"`
+	Type     int            `json:"type"`
+	ImgSrc   string         `json:"imgsrc"`
 	UserName string         `json:"username"`
 	Question string         `json:"question"`
 	Options  pq.StringArray `json:"options" gorm:"type:text[]"`
 	Date     string         `json:"date"`
 	Ans      pq.StringArray `json:"ans" gorm:"type:text[]"`
+}
+type Quiz struct {
+	ID          uint `json:"id"`
+	OwnerID     uint
+	Name        string         `json:"name"`
+	UserName    string         `json:"username"`
+	QuestionsID pq.Int32Array  `json:"questions" gorm:"type:int[]"`
+	Date        string         `json:"date"`
+	Ans         pq.StringArray `json:"ans" gorm:"type:text[]"`
+}
+type TokenDetails struct {
+	AccessToken  string
+	RefreshToken string
+	AccessUuid   string
+	RefreshUuid  string
+	AtExpires    int64
+	RtExpires    int64
+}
+type TokenBase struct {
+	AccessUuid string        `json:"accessuuid"`
+	UserId     string        `json:"userid"`
+	DurTime    time.Duration `json:"durtime"`
 }
 
 func main() {
@@ -43,6 +67,8 @@ func main() {
 	defer fff.Close()
 
 	db.AutoMigrate(&Question{})
+	db.AutoMigrate(&Quiz{})
+	db.AutoMigrate(&TokenBase{})
 
 	r := gin.Default()
 	r.GET("/q", GetQuestions)
@@ -50,10 +76,16 @@ func main() {
 	r.POST("/newq", CreateQuestion)
 	r.DELETE("/delq/:id", DeleteQestion)
 
+	r.GET("/quiz", GetQuestions)
+	r.GET("/quiz/:id", GetQuestion)
+	r.POST("/newquiz", CreateQuestion)
+	r.DELETE("/delquiz/:id", DeleteQestion)
+
 	r.Use((cors.Default()))
 	r.Run(":8080")
 }
 
+// Qestions
 func GetQuestion(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var qest Question
@@ -93,3 +125,47 @@ func DeleteQestion(c *gin.Context) {
 	c.Header("access-control-allow-origin", "*")
 	c.JSON(200, gin.H{"id #" + id: "deleted"})
 }
+
+// End Qestions
+// Quiz
+func GetQuiz(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var quiz Quiz
+	if err := db.Where("id = ?", id).First(&quiz).Error; err != nil {
+		c.AbortWithStatus(404)
+		fmt.Println(err)
+	} else {
+		c.Header("access-control-allow-origin", "*")
+		c.JSON(200, quiz)
+	}
+}
+func GetQuizs(c *gin.Context) {
+	var quizs []Quiz
+	if err := db.Find(&quizs).Error; err != nil {
+		c.AbortWithStatus(404)
+		fmt.Println(err)
+	} else {
+		c.Header("access-control-allow-origin", "*")
+		c.JSON(200, quizs)
+	}
+}
+func CreateQuiz(c *gin.Context) {
+	var quiz Quiz
+	c.BindJSON(&quiz)
+	quiz.Date = time.Now().Format("02-Jan-2006")
+	db.Create(&quiz)
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, quiz)
+}
+func DeleteQuiz(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var quiz Quiz
+	d := db.Where("id = ?", id).Delete(&quiz)
+	if d.Error != nil {
+		fmt.Println("Error!!!!  ", d)
+	}
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{"id #" + id: "deleted"})
+}
+
+// End Quiz
