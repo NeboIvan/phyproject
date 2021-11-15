@@ -82,7 +82,7 @@ func main() {
 	r.DELETE("/delquiz/:id", DeleteQestion)
 
 	r.Use((cors.Default()))
-	r.Run(":8080")
+	r.RunTLS(":8080", "./MyCertificate.crt", "MyKey.key")
 }
 
 // Qestions
