@@ -46,7 +46,6 @@ export default function Home() {
   if (isLoading) {
     return <div>Loading ...</div>;
   }
-  alert(isAuthenticated);
   const chenter = {
     margin: 10,
     display: "flex",
