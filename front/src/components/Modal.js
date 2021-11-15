@@ -168,13 +168,14 @@ export default function FormDialog() {
     }
   };
 
+
   return (
     <div>
-      <center style={{ margin: 10 }}>
+      <div>
         <Button variant="outlined" onClick={handleClickOpen}>
           Создать Задачу
         </Button>
-      </center>
+      </div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Создание Задачи</DialogTitle>
         <DialogContent>

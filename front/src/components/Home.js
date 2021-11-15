@@ -7,6 +7,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Modal from "./Modal";
+import LoginButton from "./others/LoginBtn";
+import { useAuth0 } from "@auth0/auth0-react";
+import Alert from "@mui/material/Alert";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -38,6 +41,23 @@ export default function Home() {
       );
   }, []);
 
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
+  alert(isAuthenticated);
+  const chenter = {
+    margin: 10,
+    display: "flex",
+    justifyContent: "space-between",
+  };
+  const mid = {
+    margin: 10,
+    display: "flex",
+    justifyContent: "center",
+  };
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
@@ -45,15 +65,33 @@ export default function Home() {
   } else if (items.length === 0) {
     return (
       <div>
-        <Modal />
+        <div style={chenter}>
+          {" "}
+          <Modal /> <LoginButton />
+        </div>
         <hr />
         <h2>Nothing To Show</h2>
+      </div>
+    );
+  } else if (!isAuthenticated) {
+    return (
+      <div>
+        <div style={mid}>
+          <LoginButton />
+        </div>
+        <Alert variant="outlined" severity="error">
+          Вы должны быть авторизованны
+        </Alert>
       </div>
     );
   } else {
     return (
       <div>
-        <Modal /><hr/>
+        <div style={chenter}>
+          {" "}
+          <Modal /> <LoginButton />
+        </div>
+        <hr />
         {TableFuncMy(items)}
       </div>
     );

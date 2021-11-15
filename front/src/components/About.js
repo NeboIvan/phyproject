@@ -8,9 +8,7 @@ export default function About() {
   const [item, setItem] = useState(null);
   let { id } = useParams();
 
-  // Note: the empty deps array [] means
-  // this useEffect will run once
-  // similar to componentDidMount()
+
   useEffect(() => {
     fetch("http://5.188.158.130:5081/q/" + id)
       .then((res) => res.json())
@@ -19,9 +17,6 @@ export default function About() {
           setIsLoaded(true);
           setItem(result);
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
           setIsLoaded(true);
           setError(error);
