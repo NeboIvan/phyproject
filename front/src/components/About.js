@@ -10,7 +10,7 @@ export default function About() {
 
 
   useEffect(() => {
-    fetch("http://5.188.158.130:5081/q/" + id)
+    fetch("https://5.188.158.130:5081/q/" + id)
       .then((res) => res.json())
       .then(
         (result) => {

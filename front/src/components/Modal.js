@@ -141,7 +141,7 @@ export default function FormDialog() {
       SetAlertOpen(true);
     }
     if (CanFetch) {
-      const recipeUrl = "http://5.188.158.130:5081/newq";
+      const recipeUrl = "https://5.188.158.130:5081/newq";
       const postBody = {
         name: nameavl,
         username: usernameavl,

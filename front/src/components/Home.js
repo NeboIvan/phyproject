@@ -24,7 +24,7 @@ export default function Home() {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("http://5.188.158.130:5081/q")
+    fetch("https://5.188.158.130:5081/q")
       .then((res) => res.json())
       .then(
         (result) => {

@@ -82,14 +82,14 @@ func main() {
 	r.DELETE("/delquiz/:id", DeleteQestion)
 
 	r.Use((cors.Default()))
-	r.RunTLS(":8080", "./MyCertificate.crt", "MyKey.key")
+	r.RunTLS(":8080", "./MyCertificate.crt", "./MyKey.key")
 }
 
 // Qestions
 func GetQuestion(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var qest Question
-	if err := db.Where("id = ?", id).First(&qest).Error; err != nil {
+	if err := db.Model(&Question{}).Where("id = ?", id).First(&qest).Error; err != nil {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
 	} else {
@@ -99,7 +99,7 @@ func GetQuestion(c *gin.Context) {
 }
 func GetQuestions(c *gin.Context) {
 	var qests []Question
-	if err := db.Find(&qests).Error; err != nil {
+	if err := db.Model(&Question{}).Find(&qests).Error; err != nil {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
 	} else {
@@ -111,14 +111,14 @@ func CreateQuestion(c *gin.Context) {
 	var qest Question
 	c.BindJSON(&qest)
 	qest.Date = time.Now().Format("02-Jan-2006")
-	db.Create(&qest)
+	db.Model(&Question{}).Create(&qest)
 	c.Header("access-control-allow-origin", "*")
 	c.JSON(200, qest)
 }
 func DeleteQestion(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var qest Question
-	d := db.Where("id = ?", id).Delete(&qest)
+	d := db.Model(&Question{}).Where("id = ?", id).Delete(&qest)
 	if d.Error != nil {
 		fmt.Println("Error!!!!  ", d)
 	}
@@ -131,7 +131,7 @@ func DeleteQestion(c *gin.Context) {
 func GetQuiz(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var quiz Quiz
-	if err := db.Where("id = ?", id).First(&quiz).Error; err != nil {
+	if err := db.Model(&Quiz{}).Where("id = ?", id).First(&quiz).Error; err != nil {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
 	} else {
@@ -141,7 +141,7 @@ func GetQuiz(c *gin.Context) {
 }
 func GetQuizs(c *gin.Context) {
 	var quizs []Quiz
-	if err := db.Find(&quizs).Error; err != nil {
+	if err := db.Model(&Quiz{}).Find(&quizs).Error; err != nil {
 		c.AbortWithStatus(404)
 		fmt.Println(err)
 	} else {
@@ -153,14 +153,14 @@ func CreateQuiz(c *gin.Context) {
 	var quiz Quiz
 	c.BindJSON(&quiz)
 	quiz.Date = time.Now().Format("02-Jan-2006")
-	db.Create(&quiz)
+	db.Model(&Quiz{}).Create(&quiz)
 	c.Header("access-control-allow-origin", "*")
 	c.JSON(200, quiz)
 }
 func DeleteQuiz(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var quiz Quiz
-	d := db.Where("id = ?", id).Delete(&quiz)
+	d := db.Model(&Quiz{}).Where("id = ?", id).Delete(&quiz)
 	if d.Error != nil {
 		fmt.Println("Error!!!!  ", d)
 	}
