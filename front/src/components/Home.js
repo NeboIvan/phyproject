@@ -12,6 +12,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Alert from "@mui/material/Alert";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import LogoutButton from "./others/LogoutButton";
+
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -43,7 +45,7 @@ export default function Home() {
       );
   }, []);
 
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
     return (
@@ -88,7 +90,7 @@ export default function Home() {
       <div>
         <div style={chenter}>
           {" "}
-          <Modal /> <LoginButton />
+          <Modal /> <div>Вы вошли как: {user.name} <LogoutButton/></div>
         </div>
         <hr />
         <h2>Nothing To Show</h2>
