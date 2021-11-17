@@ -10,6 +10,8 @@ import Modal from "./Modal";
 import LoginButton from "./others/LoginBtn";
 import { useAuth0 } from "@auth0/auth0-react";
 import Alert from "@mui/material/Alert";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -44,7 +46,17 @@ export default function Home() {
   const { isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
-    return <div>Loading ...</div>;
+    return (
+      <div>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}
+        >
+          <CircularProgress color="inherit" />
+          Loading.... User Data
+        </Backdrop>
+      </div>
+    );
   }
   const chenter = {
     margin: 10,
@@ -60,7 +72,17 @@ export default function Home() {
   if (error) {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}
+        >
+          <CircularProgress color="inherit" />
+          Loading.... Data
+        </Backdrop>
+      </div>
+    );
   } else if (items.length === 0) {
     return (
       <div>
