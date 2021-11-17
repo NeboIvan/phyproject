@@ -15,6 +15,8 @@ import (
 var db *gorm.DB
 
 type Question struct {
+	gorm.Model
+
 	ID       uint `json:"id"`
 	OwnerID  uint
 	Name     string         `json:"name"`
@@ -27,6 +29,8 @@ type Question struct {
 	Ans      pq.StringArray `json:"ans" gorm:"type:text[]"`
 }
 type Quiz struct {
+	gorm.Model
+
 	ID          uint `json:"id"`
 	OwnerID     uint
 	Name        string         `json:"name"`
@@ -34,19 +38,6 @@ type Quiz struct {
 	QuestionsID pq.Int32Array  `json:"questions" gorm:"type:int[]"`
 	Date        string         `json:"date"`
 	Ans         pq.StringArray `json:"ans" gorm:"type:text[]"`
-}
-type TokenDetails struct {
-	AccessToken  string
-	RefreshToken string
-	AccessUuid   string
-	RefreshUuid  string
-	AtExpires    int64
-	RtExpires    int64
-}
-type TokenBase struct {
-	AccessUuid string        `json:"accessuuid"`
-	UserId     string        `json:"userid"`
-	DurTime    time.Duration `json:"durtime"`
 }
 
 func main() {
@@ -68,7 +59,6 @@ func main() {
 
 	db.AutoMigrate(&Question{})
 	db.AutoMigrate(&Quiz{})
-	db.AutoMigrate(&TokenBase{})
 
 	r := gin.Default()
 	r.GET("/q", GetQuestions)
