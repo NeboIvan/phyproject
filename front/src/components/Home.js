@@ -12,7 +12,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Alert from "@mui/material/Alert";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import LogoutButton from "./others/LogoutButton";
+import LogoutButton from "./others/LogOutBtn";
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -90,7 +90,7 @@ export default function Home() {
       <div>
         <div style={chenter}>
           {" "}
-          <Modal /> <div>Вы вошли как: {user.name} <LogoutButton/></div>
+          <Modal /> <div>Вы вошли как: {user} <LogoutButton/></div>
         </div>
         <hr />
         <h2>Nothing To Show</h2>
