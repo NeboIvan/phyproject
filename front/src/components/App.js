@@ -5,17 +5,18 @@ import Profile from "./Profile"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function App() {
+  const address = "localhost:8080";
   return (
     <Router>
       <Switch>
         <Route path="/qests/:id">  
-          <About />
+          <About addr={address}/>
         </Route>
         <Route path="/profile">
-          <Profile />
+          <Profile addr={address}/>
         </Route> 
         <Route path="/">
-          <Home />
+          <Home addr={address}/>
         </Route>
       </Switch>
     </Router>

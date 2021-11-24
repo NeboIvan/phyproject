@@ -19,7 +19,7 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-export default function Home() {
+export default function Home(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState([]);
@@ -28,7 +28,7 @@ export default function Home() {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("https://5.188.158.130:5081/q")
+    fetch("https://"+props.addr+"/q")
       .then((res) => res.json())
       .then(
         (result) => {
@@ -46,6 +46,7 @@ export default function Home() {
   }, []);
 
   const { user, isAuthenticated, isLoading } = useAuth0();
+  
 
   if (isLoading) {
     return (
@@ -90,7 +91,7 @@ export default function Home() {
       <div>
         <div style={chenter}>
           {" "}
-          <Modal /> <div>Вы вошли как: {user} <LogoutButton/></div>
+          <Modal addr={props.addr}/> <div>Вы вошли как: {user} <LogoutButton/></div>
         </div>
         <hr />
         <h2>Nothing To Show</h2>

@@ -22,7 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "./modal.css";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-export default function FormDialog() {
+export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [nameavl, setNameval] = React.useState("");
   const [usernameavl, setUsernameval] = React.useState("");
@@ -36,7 +36,7 @@ export default function FormDialog() {
   const [error3, SetError3] = React.useState(false);
   const [errorText, SetErrorText] = React.useState("Не должно быть пустым");
   const ErrText = "Не должно быть пустым";
-
+  console.log("jjjjj:  "+props.addr);
   const handleToggle = (value) => () => {
     const currentIndex = Answers.indexOf(value);
     const newChecked = [...Answers];
@@ -141,7 +141,6 @@ export default function FormDialog() {
       SetAlertOpen(true);
     }
     if (CanFetch) {
-      const recipeUrl = "https://5.188.158.130:5081/newq";
       const postBody = {
         name: nameavl,
         username: usernameavl,
@@ -158,7 +157,7 @@ export default function FormDialog() {
         body: JSON.stringify(postBody),
       };
 
-      fetch(recipeUrl, requestMetadata)
+      fetch("https://"+props.addr+"/newq", requestMetadata)
         .then((res) => res.json())
         .then((recipes) => {
           console.log(recipes);

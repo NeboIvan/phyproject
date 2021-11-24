@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import Nav from "./others/nav";
 
-export default function About() {
+export default function About(props) {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [item, setItem] = useState(null);
@@ -10,7 +10,7 @@ export default function About() {
 
 
   useEffect(() => {
-    fetch("https://5.188.158.130:5081/q/" + id)
+    fetch("https://"+props.addr+"/q/" + id)
       .then((res) => res.json())
       .then(
         (result) => {
