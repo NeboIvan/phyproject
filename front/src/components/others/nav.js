@@ -8,7 +8,7 @@ export default function Nav() {
   return (
     <div>
       <Breadcrumbs aria-label="Navigation">
-        <Link underline="hover" color="inherit" href="/">
+        <Link underline="hover" color="inherit" href="/"  >
           Главная
         </Link>
 

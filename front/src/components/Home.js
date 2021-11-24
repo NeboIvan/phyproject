@@ -12,8 +12,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import Alert from "@mui/material/Alert";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import Avatar from "@mui/material/Avatar";
 import LogoutButton from "./others/LogOutBtn";
-
+import {IconButton,Tooltip} from "@mui/material";
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -28,7 +29,7 @@ export default function Home(props) {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("https://"+props.addr+"/q")
+    fetch("https://" + props.addr + "/q")
       .then((res) => res.json())
       .then(
         (result) => {
@@ -45,8 +46,7 @@ export default function Home(props) {
       );
   }, []);
 
-  const { user, isAuthenticated, isLoading } = useAuth0();
-  
+  const { user,logout, isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
     return (
@@ -61,6 +61,7 @@ export default function Home(props) {
       </div>
     );
   }
+  console.log(user);
   const chenter = {
     margin: 10,
     display: "flex",
@@ -71,6 +72,16 @@ export default function Home(props) {
     display: "flex",
     justifyContent: "center",
   };
+
+  const ava = (
+    <div>
+      <Tooltip title={user?.name + ", Выйти?"} placement="bottom">
+        <IconButton onClick={() => logout({ returnTo: window.location.origin })}>
+          <Avatar alt={user == 0 ? "NoName" : user?.name} src={user == 0 ? "https://cdn3.iconfinder.com/data/icons/viiva-emotions-vol2/32/huh-512.png" :  user?.picture } />
+        </IconButton>
+      </Tooltip>
+    </div>
+  );
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -91,7 +102,7 @@ export default function Home(props) {
       <div>
         <div style={chenter}>
           {" "}
-          <Modal addr={props.addr}/> <div>Вы вошли как: {user} <LogoutButton/></div>
+          <Modal addr={props.addr} /> <div>{ava}</div>
         </div>
         <hr />
         <h2>Nothing To Show</h2>
@@ -113,7 +124,7 @@ export default function Home(props) {
       <div>
         <div style={chenter}>
           {" "}
-          <Modal /> <LoginButton />
+          <Modal addr={props.addr} /> <div>{ava}</div>
         </div>
         <hr />
         {TableFuncMy(items)}

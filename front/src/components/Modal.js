@@ -12,6 +12,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import { useAuth0 } from "@auth0/auth0-react";
 import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
 import Alert from "@mui/material/Alert";
@@ -35,6 +36,8 @@ export default function FormDialog(props) {
   const [error2, SetError2] = React.useState(false);
   const [error3, SetError3] = React.useState(false);
   const [errorText, SetErrorText] = React.useState("Не должно быть пустым");
+  const { user, isAuthenticated } = useAuth0();
+
   const ErrText = "Не должно быть пустым";
   console.log("jjjjj:  "+props.addr);
   const handleToggle = (value) => () => {
@@ -125,10 +128,6 @@ export default function FormDialog(props) {
       SetError1(true);
       CanFetch = false;
     }
-    if (usernameavl === "") {
-      SetError2(true);
-      CanFetch = false;
-    }
     if (textval === "") {
       SetError3(true);
       CanFetch = false;
@@ -140,10 +139,11 @@ export default function FormDialog(props) {
     if (Answers.length == 0) {
       SetAlertOpen(true);
     }
+    console.log("Can Fetch?: "+CanFetch);
     if (CanFetch) {
       const postBody = {
         name: nameavl,
-        username: usernameavl,
+        username: user.name,
         question: textval,
         options: Options,
         ans: Answers,
@@ -156,6 +156,8 @@ export default function FormDialog(props) {
         },
         body: JSON.stringify(postBody),
       };
+
+      console.log("JSON BODY: "+requestMetadata);
 
       fetch("https://"+props.addr+"/newq", requestMetadata)
         .then((res) => res.json())
@@ -209,17 +211,6 @@ export default function FormDialog(props) {
             helperText={error1 ? ErrText : ""}
             error={error1}
             onChange={nameavlChange}
-          />
-          <TextField
-            id="username"
-            label="Ваше Имя"
-            type="text"
-            style={{ marginBottom: 15 }}
-            fullWidth
-            error={error2}
-            variant="standard"
-            helperText={error2 ? ErrText : ""}
-            onChange={usernameavlChange}
           />
           <TextField
             id="outlined-multiline-static"
