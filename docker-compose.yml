@@ -15,11 +15,10 @@ services:
     image: gakgan/phy-be:latest
     restart: always
     networks:
-      - proxy
+        - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ivan.rule=Host(`ivan-82-202-247-237.nip.i
-      \o`)"
+      - "traefik.http.routers.ivan.rule=Host(`ivan-82-202-247-237.nip.io`)"
       - "traefik.http.routers.ivan.tls.certresolver=letsencrypt"
       - "traefik.http.services.ivan.loadbalancer.server.port=8080"
     environment:
@@ -36,11 +35,10 @@ services:
     image: gakgan/phy-fe:latest
     restart: always
     networks:
-      - proxy
+        - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ivan.rule=Host(`ivan-82-202-247-237.nip.i
-      \o`)"
+      - "traefik.http.routers.ivan.rule=Host(`ivan-82-202-247-237.nip.io`)"
       - "traefik.http.routers.ivan.tls.certresolver=letsencrypt"
       - "traefik.http.services.ivan.loadbalancer.server.port=8080"
     ports:
