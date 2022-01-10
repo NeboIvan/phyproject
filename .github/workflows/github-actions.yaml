@@ -40,23 +40,23 @@ jobs:
           source: "docker-compose.yml"
           target: "/phyproject"
       - name: docker-compose pull
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@master 
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          script: "cd /phyproject && sudo docker-compose pull"
+          script: "cd /phyproject && docker-compose pull"
       - name: docker-compose up
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          script: "cd /phyproject && sudo docker-compose up --force-recreate --build -d"
+          script: "cd /phyproject && docker-compose up --force-recreate --build -d"
       - name: docker image prune
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          script: "sudo docker image prune -f"
+          script: "docker image prune -f"
