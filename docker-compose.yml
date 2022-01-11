@@ -15,7 +15,7 @@ services:
     image: gakgan/phy-be:latest
     restart: always
     networks:
-        - proxy
+      - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ivan.rule=Host(`back-82-202-247-237.nip.io`)"
@@ -33,7 +33,7 @@ services:
     image: gakgan/phy-fe:latest
     restart: always
     networks:
-        - proxy
+      - proxy
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ivan.rule=Host(`front-82-202-247-237.nip.io`)"
