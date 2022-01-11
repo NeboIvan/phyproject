@@ -5,7 +5,6 @@ WORKDIR /app
 
 # add `/app/node_modules/.bin` to $PATH
 ENV PATH /app/node_modules/.bin:$PATH
-ENV HTTPS true
 
 # install app dependencies
 COPY package.json ./

@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	GetApp(false)
+	GetApp(true)
 }
 
 type Application struct {
@@ -88,7 +88,7 @@ func (app *Application) CreateCreator() {
 	r.DELETE("/delquiz/:id", app.DeleteQuiz)
 
 	r.Use((cors.Default()))
-	r.RunTLS(":8080", "./MyCertificate.crt", "./MyKey.key")
+	r.Run(":8080")
 }
 
 // Qestions
