@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	GetApp(true)
+	GetApp(false)
 }
 
 type Application struct {
@@ -59,16 +59,58 @@ func GetApp(isRealease bool) {
 			os.Getenv("POSTGRES_DB"),
 			os.Getenv("POSTGRES_PORT"))
 	} else {
-		dsn = "host=5.188.158.130 user=dbuser password=CrwQTZcwaB7t9hLu dbname=phy port=5082 sslmode=disable TimeZone=Asia/Shanghai"
+		dsn = "host=82.202.247.237 user=dbuser password=CrwQTZcwaB7t9hLu dbname=phy port=5082 sslmode=disable TimeZone=Asia/Shanghai"
 	}
 	app.db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
 	}
-	app.CreateCreator()
+	r := app.CreateCreator()
+	// if isRealease {
+	r.Run(":8080")
+	// } else {
+	// 	cert := &x509.Certificate{
+	// 		SerialNumber: big.NewInt(1658),
+	// 		Subject: pkix.Name{
+	// 			Organization:  []string{"EN Group"},
+	// 			Country:       []string{"Russia"},
+	// 			Province:      []string{"Moscow"},
+	// 			Locality:      []string{"Moscow"},
+	// 			StreetAddress: []string{"Moscow"},
+	// 			PostalCode:    []string{"143006"},
+	// 		},
+	// 		NotBefore:    time.Now(),
+	// 		NotAfter:     time.Now().AddDate(10, 0, 0),
+	// 		SubjectKeyId: []byte{1, 2, 3, 4, 6},
+	// 		ExtKeyUsage:  []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
+	// 		KeyUsage:     x509.KeyUsageDigitalSignature,
+	// 	}
+	// 	priv, _ := rsa.GenerateKey(rand.Reader, 2048)
+	// 	pub := &priv.PublicKey
+
+	// 	// Sign the certificate
+	// 	certificate, _ := x509.CreateCertificate(rand.Reader, cert, cert, pub, priv)
+
+	// 	certBytes := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certificate})
+	// 	keyBytes := pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(priv)})
+
+	// 	// Generate a key pair from your pem-encoded cert and key ([]byte).
+	// 	x509Cert, _ := tls.X509KeyPair(certBytes, keyBytes)
+
+	// 	tlsConfig := &tls.Config{
+	// 		Certificates: []tls.Certificate{x509Cert},
+	// 	}
+	// 	server := http.Server{
+	// 		Addr:      "",
+	// 		Handler:   r,
+	// 		TLSConfig: tlsConfig,
+	// 	}
+	// 	server.ListenAndServeTLS("", "")
+
+	// }
 }
 
-func (app *Application) CreateCreator() {
+func (app *Application) CreateCreator() *gin.Engine {
 	fff, _ := app.db.DB()
 
 	defer fff.Close()
@@ -88,7 +130,7 @@ func (app *Application) CreateCreator() {
 	r.DELETE("/delquiz/:id", app.DeleteQuiz)
 
 	r.Use((cors.Default()))
-	r.Run(":8080")
+	return r
 }
 
 // Qestions

@@ -5,7 +5,7 @@ import Profile from "./Profile"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 function App() {
-  const address = "5.188.158.130:5081";
+  const address = "back-82-202-247-237.nip.io";
   return (
     <Router>
       <Switch>

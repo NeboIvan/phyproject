@@ -3,3 +3,5 @@
 data-*
 nothing
 back/back.exe
+back/tlsKey.key
+back/tlsSert.cert
