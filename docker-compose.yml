@@ -13,6 +13,11 @@ services:
       - "5082:5432"
     volumes:
       - ./data-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   be:
     image: gakgan/phy-be:latest
     restart: always
@@ -29,6 +34,9 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    depends_on:
+      db:
+        condition: service_healthy
   fe:
     image: gakgan/phy-fe:latest
     restart: always
