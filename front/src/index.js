@@ -5,11 +5,9 @@ import { Auth0Provider } from "@auth0/auth0-react";
 
 ReactDOM.render(
   <Auth0Provider
-    domain="phytests.us.auth0.com"
-    clientId="SJ0TbyNOgurifaY0058lL4XlVBPmmjAW"
+    domain="phyprj.us.auth0.com"
+    clientId="qMLdjgnbWD4vCjxcdNQ5r7F2nLWsJEJC"
     redirectUri={window.location.origin}
-    audience="https://phytests.us.auth0.com/api/v2/"
-    scope="read:current_user update:current_user_metadata"
   >
     <App />
   </Auth0Provider>,

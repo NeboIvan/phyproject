@@ -12,10 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func main() {
-	GetApp(false)
-}
-
 type Application struct {
 	db *gorm.DB
 }
@@ -46,71 +42,28 @@ type Quiz struct {
 	Ans         pq.StringArray `json:"ans" gorm:"type:text[]"`
 }
 
-func GetApp(isRealease bool) {
+func main() {
+	GetApp()
+}
+
+func GetApp() {
 	var err error
 	var dsn string
 	var app Application
-	if isRealease {
-		gin.SetMode(gin.ReleaseMode)
-		dsn = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
-			os.Getenv("POSTGRES_HOST"),
-			os.Getenv("POSTGRES_USER"),
-			os.Getenv("POSTGRES_PASSWORD"),
-			os.Getenv("POSTGRES_DB"),
-			os.Getenv("POSTGRES_PORT"))
-	} else {
-		dsn = "host=82.202.247.237 user=dbuser password=CrwQTZcwaB7t9hLu dbname=phy port=5082 sslmode=disable TimeZone=Asia/Shanghai"
-	}
+	dsn = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",
+		os.Getenv("POSTGRES_HOST"),
+		os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"),
+		os.Getenv("POSTGRES_DB"),
+		os.Getenv("POSTGRES_PORT"))
 	app.db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
 	}
-	r := app.CreateCreator()
-	// if isRealease {
-	r.Run(":8080")
-	// } else {
-	// 	cert := &x509.Certificate{
-	// 		SerialNumber: big.NewInt(1658),
-	// 		Subject: pkix.Name{
-	// 			Organization:  []string{"EN Group"},
-	// 			Country:       []string{"Russia"},
-	// 			Province:      []string{"Moscow"},
-	// 			Locality:      []string{"Moscow"},
-	// 			StreetAddress: []string{"Moscow"},
-	// 			PostalCode:    []string{"143006"},
-	// 		},
-	// 		NotBefore:    time.Now(),
-	// 		NotAfter:     time.Now().AddDate(10, 0, 0),
-	// 		SubjectKeyId: []byte{1, 2, 3, 4, 6},
-	// 		ExtKeyUsage:  []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
-	// 		KeyUsage:     x509.KeyUsageDigitalSignature,
-	// 	}
-	// 	priv, _ := rsa.GenerateKey(rand.Reader, 2048)
-	// 	pub := &priv.PublicKey
-
-	// 	// Sign the certificate
-	// 	certificate, _ := x509.CreateCertificate(rand.Reader, cert, cert, pub, priv)
-
-	// 	certBytes := pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: certificate})
-	// 	keyBytes := pem.EncodeToMemory(&pem.Block{Type: "RSA PRIVATE KEY", Bytes: x509.MarshalPKCS1PrivateKey(priv)})
-
-	// 	// Generate a key pair from your pem-encoded cert and key ([]byte).
-	// 	x509Cert, _ := tls.X509KeyPair(certBytes, keyBytes)
-
-	// 	tlsConfig := &tls.Config{
-	// 		Certificates: []tls.Certificate{x509Cert},
-	// 	}
-	// 	server := http.Server{
-	// 		Addr:      "",
-	// 		Handler:   r,
-	// 		TLSConfig: tlsConfig,
-	// 	}
-	// 	server.ListenAndServeTLS("", "")
-
-	// }
+	app.CreateCreator()
 }
 
-func (app *Application) CreateCreator() *gin.Engine {
+func (app *Application) CreateCreator() {
 	fff, _ := app.db.DB()
 
 	defer fff.Close()
@@ -130,7 +83,7 @@ func (app *Application) CreateCreator() *gin.Engine {
 	r.DELETE("/delquiz/:id", app.DeleteQuiz)
 
 	r.Use((cors.Default()))
-	return r
+	r.Run(":8080")
 }
 
 // Qestions

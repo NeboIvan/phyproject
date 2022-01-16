@@ -29,7 +29,7 @@ export default function Home(props) {
   // this useEffect will run once
   // similar to componentDidMount()
   useEffect(() => {
-    fetch("https://" + props.addr + "/q")
+    fetch(props.netMet+"://" + props.addr + "/q")
       .then((res) => res.json())
       .then(
         (result) => {
@@ -83,6 +83,7 @@ export default function Home(props) {
     </div>
   );
 
+
   if (error) {
     return <div>Error: {error.message}</div>;
   } else if (!isLoaded) {
@@ -97,17 +98,6 @@ export default function Home(props) {
         </Backdrop>
       </div>
     );
-  } else if (items.length === 0) {
-    return (
-      <div>
-        <div style={chenter}>
-          {" "}
-          <Modal addr={props.addr} /> <div>{ava}</div>
-        </div>
-        <hr />
-        <h2>Nothing To Show</h2>
-      </div>
-    );
   } else if (!isAuthenticated) {
     return (
       <div>
@@ -119,12 +109,23 @@ export default function Home(props) {
         </Alert>
       </div>
     );
-  } else {
+  } else if (items.length === 0) {
     return (
       <div>
         <div style={chenter}>
           {" "}
-          <Modal addr={props.addr} /> <div>{ava}</div>
+          <Modal netMet={props.netMet} addr={props.addr} /> <div>{ava}</div>
+        </div>
+        <hr />
+        <h2>Nothing To Show</h2>
+      </div>
+    );
+  }  else {
+    return (
+      <div>
+        <div style={chenter}>
+          {" "}
+          <Modal  netMet={props.netMet}  addr={props.addr} /> <div>{ava}</div>
         </div>
         <hr />
         {TableFuncMy(items)}

@@ -10,7 +10,7 @@ export default function About(props) {
 
 
   useEffect(() => {
-    fetch("https://"+props.addr+"/q/" + id)
+    fetch(props.netMet+"://"+props.addr+"/q/" + id)
       .then((res) => res.json())
       .then(
         (result) => {

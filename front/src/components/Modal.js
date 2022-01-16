@@ -159,7 +159,7 @@ export default function FormDialog(props) {
 
       console.log("JSON BODY: "+requestMetadata);
 
-      fetch("https://"+props.addr+"/newq", requestMetadata)
+      fetch(props.netMet+"://"+props.addr+"/newq", requestMetadata)
         .then((res) => res.json())
         .then((recipes) => {
           console.log(recipes);
