@@ -18,6 +18,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ivanad.rule=Host(`adminer-82-202-247-237.nip.io`)"
+      - "traefik.http.routers.ivanad.tls.certresolver=letsencrypt"
+      - "traefik.http.services.ivanad.loadbalancer.server.port=8080"
+    depends_on:
+      db:
+        condition: service_healthy
   be:
     image: gakgan/phy-be:latest
     restart: always
