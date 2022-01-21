@@ -99,7 +99,7 @@ export default function About(props) {
                         <CardActionArea>
                             <CardMedia component="img" height="200"
                                 image={
-                                    Count == 100 ? "/output-onlinegiftools.gif" : "/NotGood.gif"
+                                    Count == 100 ? "https://file.io/c4QXRLjgObOd" : "https://file.io/yd3RgHpd8QBq"
                                 }
                                 alt="green iguana"/>
                             <CardContent style={
