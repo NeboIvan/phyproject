@@ -18,6 +18,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  pgbackups:
+    container_name: Backup
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    volumes:
+      - ./backup:/backups
+    networks:
+      - proxy
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB:?err}
+      - POSTGRES_USER=${POSTGRES_USER:?err}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?err}
+      - POSTGRES_EXTRA_OPTS=-Z9 --schema=public --blobs
+      - SCHEDULE=@every 1h30m00s
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+    depends_on:
+      db:
+        condition: service_healthy
   adminer:
     image: adminer
     restart: always
@@ -60,7 +81,6 @@ services:
       - "traefik.http.routers.ivanfe.rule=Host(`front-82-202-247-237.nip.io`)"
       - "traefik.http.routers.ivanfe.tls.certresolver=letsencrypt"
       - "traefik.http.services.ivanfe.loadbalancer.server.port=3000"
-
 networks:
   proxy:
     external: true
