@@ -13,3 +13,14 @@ ReactDOM.render(
   </Auth0Provider>,
   document.getElementById("root")
 );
+
+// ReactDOM.render(
+//   <Auth0Provider
+//     domain="dev-idoyawp8.us.auth0.com"
+//     clientId="IZFs7CREBQmgyfE6wNRQltYayfRxCuMb"
+//     redirectUri={window.location.origin}
+//   >
+//     <App />
+//   </Auth0Provider>,
+//   document.getElementById("root")
+// );
